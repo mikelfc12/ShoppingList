@@ -48,7 +48,7 @@ def submit_meals():
     
         # Recalculate result_df after submitting
         recalculate_result_df()
-
+    root.destroy()
 
 def recalculate_result_df():
     global result_df
@@ -66,14 +66,17 @@ def perform_data_manipulation(Meals):
     
     ######   CREATE COLUMNS   ######
     Shopping_List_Merge['Quantity_Required'] = Shopping_List_Merge['Quantity'] / Shopping_List_Merge['Servings_R'] *  Shopping_List_Merge['Servings_M'] 
-    Shopping_List_Merge['Quantity_Required_Rounded'] = np.ceil(Shopping_List_Merge['Quantity_Required']).astype(int)
 
     ######   KEEP COLUMNS   ######
-    columns_to_keep = ['Ingredients', 'Food_Group', 'Quantity_Required_Rounded']
+    columns_to_keep = ['Ingredients', 'Food_Group', 'Quantity_Required']
     Shopping_List_Keep = Shopping_List_Merge.filter(columns_to_keep)
 
+    ######   MATHS COLUMNS   ######
+    Shopping_List_Sum = Shopping_List_Keep.groupby(['Ingredients', 'Food_Group'])['Quantity_Required'].sum().reset_index()
+    Shopping_List_Sum['Quantity_Required_Rounded'] = np.ceil(Shopping_List_Sum['Quantity_Required']).astype(int)
+
     ######   RENAME COLUMNS   ######
-    Shopping_List_Rename = Shopping_List_Keep.rename(columns={'Quantity_Required_Rounded': 'Quantity'})
+    Shopping_List_Rename = Shopping_List_Sum.rename(columns={'Quantity_Required_Rounded': 'Quantity'})
 
     ######   REORDER COLUMNS   ######
     Shopping_List_ReOrder = pd.DataFrame(Shopping_List_Rename, columns=['Ingredients', 'Quantity', 'Food_Group'])
@@ -133,5 +136,6 @@ if __name__ == "__main__":
 
     root.mainloop()
         # After the Tkinter window is closed, you can perform further manipulation
-if meals_df is not None:
-    recalculate_result_df()
+    if meals_df is not None:
+        recalculate_result_df()
+    
