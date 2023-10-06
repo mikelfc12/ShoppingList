@@ -59,7 +59,7 @@ def recalculate_result_df():
 
 def perform_data_manipulation(Meals):
     # Additional manipulation steps
-    Recipes_path = 'C:\\Users\\MichaelDixon\\OneDrive - Dufrain Consulting\\Documents\\Python Scripts\\ShoppingList\\Recipe_Master.xlsx'
+    Recipes_path = 'https://github.com/mikelfc12/ShoppingList/raw/main/Recipe_Master.xlsx'
     Recipes = pd.read_excel(Recipes_path)
     Shopping_List_Merge = pd.merge(Recipes, Meals, left_on='Meal_Name', right_on='Meal', how='inner', suffixes=('_R', '_M'))
 
