@@ -3,13 +3,18 @@ from tkinter import simpledialog
 import pandas as pd
 import numpy as np
 
-valid_meals = ['Spag Bol','Fish and Veg']
+#Valid Meal List
+valid_meal_path = 'C:\\Users\\MichaelDixon\\OneDrive - Dufrain Consulting\\Documents\\Python Scripts\\ShoppingList\\Recipe_Master.xlsx'
+column_name = 'Meal_Name'
+vm_data = pd.read_excel(valid_meal_path)
+valid_meals = vm_data[column_name].unique().tolist()
+print(valid_meals)
+
 
 def get_meals_with_servings():
     meals_with_servings = []
     while True:
         meal = simpledialog.askstring("Meal Input", "Enter a meal (or 'exit' to finish):")
-        #if meal.lower() == 'exit':
         if not meal or meal.lower() == 'exit':
             break
         elif meal not in valid_meals:
@@ -65,7 +70,8 @@ def recalculate_result_df():
 
 def perform_data_manipulation(Meals):
     # Additional manipulation steps
-    Recipes_path = 'https://github.com/mikelfc12/ShoppingList/raw/main/Recipe_Master.xlsx'
+    #Recipes_path = 'https://github.com/mikelfc12/ShoppingList/raw/main/Recipe_Master.xlsx'
+    Recipes_path = 'C:\\Users\\MichaelDixon\\OneDrive - Dufrain Consulting\\Documents\\Python Scripts\\ShoppingList\\Recipe_Master.xlsx'
     Recipes = pd.read_excel(Recipes_path)
     Shopping_List_Merge = pd.merge(Recipes, Meals, left_on='Meal_Name', right_on='Meal', how='inner', suffixes=('_R', '_M'))
 
