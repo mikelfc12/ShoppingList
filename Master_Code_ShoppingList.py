@@ -3,15 +3,21 @@ from tkinter import simpledialog
 import pandas as pd
 import numpy as np
 
+valid_meals = ['Spag Bol','Fish and Veg']
+
 def get_meals_with_servings():
     meals_with_servings = []
     while True:
         meal = simpledialog.askstring("Meal Input", "Enter a meal (or 'exit' to finish):")
+        #if meal.lower() == 'exit':
         if not meal or meal.lower() == 'exit':
             break
-        servings = simpledialog.askinteger("Servings Input", f"How many servings for {meal}?")
-        meals_with_servings.append({'Meal': meal, 'Servings': servings})
-        update_listbox(meals_with_servings)
+        elif meal not in valid_meals:
+            tk.messagebox.showerror("Error", "Invalid meal. Please enter a valid meal.")
+        else:
+            servings = simpledialog.askinteger("Servings Input", f"How many servings for {meal}?")
+            meals_with_servings.append({'Meal': meal, 'Servings': servings})
+            update_listbox(meals_with_servings)
     return meals_with_servings
 
 def update_listbox(meals_list):
